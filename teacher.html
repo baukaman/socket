@@ -1,0 +1,30 @@
+﻿<!doctype html>
+<html>
+  <head>
+    <title>Socket.IO chat</title>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+  </head>
+  <body>
+    <ul id="messages"></ul>
+    <form action="">
+      <textarea autocomplete="off" id="logs" ></textarea>
+    </form>
+    <script src="/socket.io/socket.io.js"></script>
+
+    <a href="#" id="lesson-request">request a lesson</a>
+
+    <script>
+      $(function(){
+        var socket = io('http://localhost:3000');
+
+        $('#lesson-request').click(function(){
+              socket.emit('lesson.request');
+        });
+
+        socket.on('lesson.accept', function(){
+            $('#logs').append('accepted');
+        });
+      });
+    </script>
+  </body>
+</html>
