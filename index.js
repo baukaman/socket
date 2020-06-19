@@ -1,6 +1,7 @@
 ﻿var app = require('express')();
 var http = require('http').createServer(app);
 var io = require('socket.io')(http);
+var axios = require('axios');
 
 app.get('/', (req, res) => {
     //res.send('<h1>hello world!!!</h1>');
@@ -8,7 +9,15 @@ app.get('/', (req, res) => {
 });
 
 io.on('connection', (socket) => {
-    console.log('connected');
+    //console.log('connected');
+    const teacher_id = socket.handshake.query.teacher_id;
+    const page_id = socket.handshake.query.page_id;
+    if(teacher_id) {
+    	axios.get('https://localhost/api/connect.teacher?teacher_id=' + teacher_id + '&page_id=' + page_id)
+    	   .then(response => {
+    	      console.log(teacher_id + ' ' + page_id + ' registered as connected');
+    	   });
+    }
     socket.on('lesson.request', (msg) => {
       io.emit('lesson.request', msg);
     });
@@ -17,6 +26,10 @@ io.on('connection', (socket) => {
     })
     socket.on('disconnect', () => {
       console.log('user disconnected');
+      axios.get('https://localhost/api/disconnect.teacher?teacher_id='+teacher_id + '&page_id=' + page_id)
+          .then(response => {
+              console.log(teacher_id + ' ' + page_id + ' registered as disconnected');
+          });
     });
 });
 
