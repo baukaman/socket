@@ -1,0 +1,6 @@
+{
+	"port": "3000",
+	"secure": true,
+	"secure_key": "/home/bake/cert/prod/todaysoft.key",
+	"secure_cert": "/home/bake/cert/prod/fullchain.crt"
+}
